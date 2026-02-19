@@ -1,0 +1,34 @@
+function [NearestWaterLine, DrinkableOrNot] = IsItDrinkable(ZipCode)
+% Function that will say what the nearest waterline is and if it is
+% drinkable or not
+
+% Input: Your Zip Code
+% Output 1: The nearest water line to your Zip Code
+% Output 2: If the waterline is drinkable or not
+
+DrinkableOrNot = 's';
+NearestWaterLine = 's';
+
+ZipCode = input('Enter your ZipCode here: ');
+RowOfZip = find(data == ZipCode);
+% User will enter their zip Code here
+% RowOfZip will find in what row the Zip Code is with the data
+% Assuming the data is a matrix with the first column being the zip code
+
+NearestWaterLine = data(RowOfZip,columnofwaterline);
+% Output 1
+
+LeadContent = data(RowOfZip, columnofleadcontent);
+if LeadContent > 0
+    DrinkableOrNot = 'Not Drinkable';
+else
+    DrinkableOrNot = 'Drinkable';
+end
+% Output 2
+% If the lead content is greater than 0, the water is not drinkable
+
+fprintf('The nearest water line is %s', NearestWaterLine);
+fprintf('The water is %s', DrinkableOrNot);
+% Displays what the nearest water line is
+% Displays if the water is drinkable or not
+end
