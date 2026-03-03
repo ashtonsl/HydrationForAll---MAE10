@@ -10,12 +10,15 @@ clc; clear; close all;
 data = readtable('dataset.csv');
 
 % EPA / CA regulatory limits
-LIM_NITRATE  = 10;    % mg/L as N     (EPA MCL)
-LIM_ARSENIC  = 10;    % ppb           (EPA MCL)
-LIM_LEAD     = 15;    % ppb           (EPA Action Level, 90th percentile)
-LIM_CHLORINE = 4;     % ppm           (EPA MRDL)
-LIM_FLUORIDE = 4;     % ppm           (EPA MCL; 0.7 ppm is recommended target)
-LIM_PFAS     = 4;     % ppt           (EPA MCL, 2024)
+LIM_NITRATE  = 10;    % mg/L as N  (EPA MCL)
+LIM_ARSENIC  = 10;    % ppb        (EPA MCL)
+LIM_LEAD     = 15;    % ppb        (EPA Action Level, 90th percentile)
+LIM_CHLORINE = 4;     % ppm        (EPA MRDL)
+LIM_FLUORIDE = 4;     % ppm        (EPA MCL)
+LIM_PFAS     = 4;     % ppt        (EPA MCL, 2024)
+LIM_PCE      = 5;     % ppb        (EPA MCL)
+LIM_BENZENE  = 5;     % ppb        (EPA MCL)
+LIM_RADON    = 300;   % pCi/L      (EPA Proposed MCL)
 
 cities    = data.city;
 utilities = data.utility;
@@ -27,6 +30,9 @@ pH_vals   = data.pH;
 chlorine  = data.chlorine_ppm;
 fluoride  = data.fluoride_ppm;
 pfas      = data.pfas_pfos_ppt;
+pce       = data.tetrachloroethylene_ppb;
+benzene   = data.benzene_ppb;
+radon     = data.radon222_pCiL;
 n         = height(data);
 
 %% ---- 2. USER INPUT -----------------------------------------
@@ -51,22 +57,28 @@ selPH      = pH_vals(idx);
 selChlor   = chlorine(idx);
 selFluor   = fluoride(idx);
 selPFAS    = pfas(idx);
+selPCE     = pce(idx);
+selBenzene = benzene(idx);
+selRadon   = radon(idx);
 
 %% ---- 3. CALL USER-DEFINED FUNCTION -------------------------
-contaminantVals  = [selNitrate, selArsenic, selLead, selChlor, selFluor, selPFAS];
-guidelineVals    = [LIM_NITRATE, LIM_ARSENIC, LIM_LEAD, LIM_CHLORINE, LIM_FLUORIDE, LIM_PFAS];
+contaminantVals = [selNitrate, selArsenic, selLead, selChlor, selFluor, ...
+                   selPFAS, selPCE, selBenzene, selRadon];
+guidelineVals   = [LIM_NITRATE, LIM_ARSENIC, LIM_LEAD, LIM_CHLORINE, LIM_FLUORIDE, ...
+                   LIM_PFAS, LIM_PCE, LIM_BENZENE, LIM_RADON];
 contaminantNames = {'Nitrate (mg/L)', 'Arsenic (ppb)', 'Lead (ppb)', ...
-                    'Chlorine (ppm)', 'Fluoride (ppm)', 'PFAS/PFOS (ppt)'};
+                    'Chlorine (ppm)', 'Fluoride (ppm)', 'PFAS/PFOS (ppt)', ...
+                    'Tetrachloroethylene (ppb)', 'Benzene (ppb)', 'Radon-222 (pCi/L)'};
 
 [ratingLabels, ratingScores] = qualityRating(contaminantVals, guidelineVals);
 
 %% ---- 4. PRINT RESULTS TABLE --------------------------------
 fprintf('\n--- Water Quality Report: %s ---\n', selCity);
 fprintf('Utility: %s\n\n', selUtility);
-fprintf('%-22s %-12s %-12s %-15s\n', 'Contaminant','Measured','Guideline','Rating');
-fprintf('%s\n', repmat('-', 1, 63));
-for i = 1:6
-    fprintf('%-22s %-12.2f %-12.2f %-15s\n', ...
+fprintf('%-30s %-12s %-12s %-15s\n', 'Contaminant','Measured','Guideline','Rating');
+fprintf('%s\n', repmat('-', 1, 71));
+for i = 1:9
+    fprintf('%-30s %-12.2f %-12.2f %-15s\n', ...
         contaminantNames{i}, contaminantVals(i), guidelineVals(i), ratingLabels{i});
 end
 fprintf('\nHardness: %.0f mg/L as CaCO3\n', selHard);
@@ -77,20 +89,21 @@ compScores = zeros(n, 1);
 for i = 1:n
     compScores(i) = compositeRisk(nitrate(i), arsenic(i), lead(i), ...
                                    chlorine(i), fluoride(i), pfas(i), ...
+                                   pce(i), benzene(i), radon(i), ...
                                    LIM_NITRATE, LIM_ARSENIC, LIM_LEAD, ...
-                                   LIM_CHLORINE, LIM_FLUORIDE, LIM_PFAS);
+                                   LIM_CHLORINE, LIM_FLUORIDE, LIM_PFAS, ...
+                                   LIM_PCE, LIM_BENZENE, LIM_RADON);
 end
 
 %% ---- FIGURE 1: All Contaminants as % of Limit (selected city) ------
 figure(1);
-contVals_plot = [selNitrate/LIM_NITRATE, selArsenic/LIM_ARSENIC, ...
-                 selLead/LIM_LEAD, selChlor/LIM_CHLORINE, ...
-                 selFluor/LIM_FLUORIDE, selPFAS/LIM_PFAS] * 100;
+contVals_plot = (contaminantVals ./ guidelineVals) * 100;
 bar(contVals_plot, 'FaceColor', [0.2 0.5 0.8]);
 hold on;
 yline(100, 'r--', 'LineWidth', 2, 'Label', 'EPA Guideline (100%)');
-set(gca, 'XTickLabel', {'Nitrate','Arsenic','Lead','Chlorine','Fluoride','PFAS/PFOS'}, ...
-    'XTick', 1:6, 'XTickLabelRotation', 15);
+shortNames = {'Nitrate','Arsenic','Lead','Chlorine','Fluoride', ...
+              'PFAS/PFOS','PCE','Benzene','Radon-222'};
+set(gca, 'XTickLabel', shortNames, 'XTick', 1:9, 'XTickLabelRotation', 20);
 ylabel('% of EPA/CA Regulatory Limit');
 title(['Contaminant Levels as % of Limit: ', selCity]);
 ylim([0 130]);
@@ -132,24 +145,21 @@ grid on;
 %% ---- FIGURE 5: Composite Risk Score (all cities) -----------
 figure(5);
 [sorted_C, sortIdx_C] = sort(compScores, 'descend');
-riskColors = [0.9 0.2 0.2;   % score >= 4 = red
-              1.0 0.75 0.0;  % score 2-3  = yellow
-              0.2 0.75 0.3]; % score 0-1  = green
 barColors = zeros(n, 3);
 for i = 1:n
-    if sorted_C(i) >= 4
-        barColors(i,:) = riskColors(1,:);
-    elseif sorted_C(i) >= 2
-        barColors(i,:) = riskColors(2,:);
+    if sorted_C(i) >= 6
+        barColors(i,:) = [0.9 0.2 0.2];   % red    - high risk
+    elseif sorted_C(i) >= 3
+        barColors(i,:) = [1.0 0.75 0.0];  % yellow - moderate
     else
-        barColors(i,:) = riskColors(3,:);
+        barColors(i,:) = [0.2 0.75 0.3];  % green  - low risk
     end
 end
 b5 = bar(sorted_C, 'FaceColor', 'flat');
 b5.CData = barColors;
 set(gca, 'XTickLabel', cities(sortIdx_C), 'XTick', 1:n, ...
     'XTickLabelRotation', 30);
-ylabel('Composite Risk Score (0 = Best, 10 = Worst)');
+ylabel('Composite Risk Score (0 = Best, 18 = Worst)');
 title('Overall Water Quality Risk Score by City');
-yticks(0:10);
+yticks(0:18);
 grid on;
