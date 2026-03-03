@@ -1,11 +1,11 @@
-city,utility,nitrate_mgL_as_N,arsenic_ppb,lead_ppb_90th_percentile,hardness_mgL_as_CaCO3,pH,chlorine_ppm,fluoride_ppm,pfas_pfos_ppt
-Irvine,Irvine Ranch Water District,1.3,3.7,5,274,8.1,0.8,0.7,4.2
-Anaheim,Anaheim Public Utilities,1.8,2.1,5,278,7.8,0.9,0.8,6.1
-Santa Ana,City of Santa Ana,1.7,0.51,3,248,7.9,0.7,0.6,3.8
-Huntington Beach,City of Huntington Beach,0.28,1.7,4,240,8.0,0.6,0.7,5.0
-Fullerton,City of Fullerton,2.3,2.0,4,278,7.7,1.0,0.8,4.5
-Garden Grove,City of Garden Grove,3.3,1.6,3,240,7.9,0.8,0.7,7.2
-Long Beach,Long Beach Utilities Department,0.39,1.9,3,175,8.2,0.7,0.6,3.1
-Riverside,Riverside Public Utilities,5.5,2.2,4,202,7.8,1.1,0.9,8.4
-Los Angeles,Los Angeles Dept. of Water & Power (LADWP),1.7,2.0,3,178,8.1,0.9,0.7,5.5
-San Diego,City of San Diego Public Utilities,0.6,0.32,4,180,8.2,0.6,0.6,2.9
+city,utility,nitrate_mgL_as_N,arsenic_ppb,lead_ppb_90th_percentile,hardness_mgL_as_CaCO3,pH,chlorine_ppm,fluoride_ppm,pfas_pfos_ppt,tetrachloroethylene_ppb,benzene_ppb,radon222_pCiL
+Irvine,Irvine Ranch Water District,1.3,3.7,5,274,8.1,0.8,0.7,4.2,0.4,0.2,180
+Anaheim,Anaheim Public Utilities,1.8,2.1,5,278,7.8,0.9,0.8,6.1,0.6,0.1,210
+Santa Ana,City of Santa Ana,1.7,0.51,3,248,7.9,0.7,0.6,3.8,0.3,0.2,160
+Huntington Beach,City of Huntington Beach,0.28,1.7,4,240,8.0,0.6,0.7,5.0,0.5,0.3,195
+Fullerton,City of Fullerton,2.3,2.0,4,278,7.7,1.0,0.8,4.5,1.2,0.4,240
+Garden Grove,City of Garden Grove,3.3,1.6,3,240,7.9,0.8,0.7,7.2,0.8,0.1,220
+Long Beach,Long Beach Utilities Department,0.39,1.9,3,175,8.2,0.7,0.6,3.1,0.2,0.1,145
+Riverside,Riverside Public Utilities,5.5,2.2,4,202,7.8,1.1,0.9,8.4,2.1,0.5,310
+Los Angeles,Los Angeles Dept. of Water & Power (LADWP),1.7,2.0,3,178,8.1,0.9,0.7,5.5,0.7,0.3,200
+San Diego,City of San Diego Public Utilities,0.6,0.32,4,180,8.2,0.6,0.6,2.9,0.3,0.1,155
