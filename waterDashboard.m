@@ -98,7 +98,7 @@ end
 %% ---- FIGURE 1: All Contaminants as % of Limit (selected city) ------
 figure(1);
 contVals_plot = (contaminantVals ./ guidelineVals) * 100;
-bar(contVals_plot, 'FaceColor', [0.2 0.5 0.8]);
+bar(contVals_plot, 'c');
 hold on;
 yline(100, 'r--', 'LineWidth', 2, 'Label', 'EPA Guideline (100%)');
 shortNames = {'Nitrate','Arsenic','Lead','Chlorine','Fluoride', ...
@@ -112,7 +112,7 @@ grid on;
 %% ---- FIGURE 2: Lead Levels Across All Cities ---------------
 figure(2);
 [sorted_L, sortIdx_L] = sort(lead);
-barh(sorted_L, 'FaceColor', [0.6 0.2 0.8]);
+barh(sorted_L, 'm');
 hold on;
 xline(LIM_LEAD, 'r--', 'LineWidth', 2, 'Label', 'EPA Action Level = 15 ppb');
 set(gca, 'YTickLabel', cities(sortIdx_L), 'YTick', 1:n);
@@ -123,7 +123,7 @@ grid on;
 %% ---- FIGURE 3: Nitrate Levels Across All Cities ------------
 figure(3);
 [sorted_N, sortIdx_N] = sort(nitrate);
-barh(sorted_N, 'FaceColor', [0.3 0.6 0.9]);
+barh(sorted_N, 'g');
 hold on;
 xline(LIM_NITRATE, 'r--', 'LineWidth', 2, 'Label', 'EPA MCL = 10 mg/L');
 set(gca, 'YTickLabel', cities(sortIdx_N), 'YTick', 1:n);
@@ -134,7 +134,7 @@ grid on;
 %% ---- FIGURE 4: PFAS/PFOS Levels Across All Cities ----------
 figure(4);
 [sorted_P, sortIdx_P] = sort(pfas);
-barh(sorted_P, 'FaceColor', [0.85 0.35 0.35]);
+barh(sorted_P, 'b');
 hold on;
 xline(LIM_PFAS, 'r--', 'LineWidth', 2, 'Label', 'EPA MCL = 4 ppt');
 set(gca, 'YTickLabel', cities(sortIdx_P), 'YTick', 1:n);
